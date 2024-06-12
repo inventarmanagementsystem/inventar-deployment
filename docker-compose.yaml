@@ -1,0 +1,50 @@
+version: '3.8'
+
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  db_data:  
+
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: inventar_api
+    networks:
+      - mynetwork
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql 
+  webapp:
+    image: inventarmanagementsystem/inventar-api:v4
+    networks:
+      - mynetwork
+    ports:
+      - "8081:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Default: "Server=mysql;port=3306;Database=inventar_api;User=root;Password=root;SslMode=None;"
+    depends_on:
+      - mysql
+    restart: unless-stopped
+  clientapp:
+    image: inventarmanagementsystem/inventar-client:v3
+    networks:
+      - mynetwork
+    ports:
+      - "5000:80"
+    depends_on:
+      - webapp
+  nginx:
+    image: inventarmanagementsystem/inventar-proxy-service:v1
+    networks:
+      - mynetwork
+    ports:
+      - "8080:80"
+    depends_on:
+      - clientapp
+      - webapp
