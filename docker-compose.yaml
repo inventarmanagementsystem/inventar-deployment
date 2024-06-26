@@ -20,7 +20,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql 
   webapp:
-    image: inventarmanagementsystem/inventar-api:12.06.2024.19.09.12
+    image: inventarmanagementsystem/inventar-api:26.06.2024.06.39.50
     networks:
       - mynetwork
     ports:
