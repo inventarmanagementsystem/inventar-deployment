@@ -32,7 +32,7 @@ services:
       - mysql
     restart: unless-stopped
   clientapp:
-    image: inventarmanagementsystem/inventar-client:01.07.2024.07.31.18
+    image: inventarmanagementsystem/inventar-client:01.07.2024.07.36.28
     networks:
       - mynetwork
     ports:
